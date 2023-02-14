@@ -26,3 +26,12 @@ bool SearchPatternInLine(std::vector<char> vLine, std::string sPattern)
 	}
 	return false;
 }
+
+void GetTransactionsInfo(std::vector<std::vector<char>> vLines, 
+	std::string sPatternStart, 
+	std::string sPatternEnd, 
+	std::string sPatternTime, 
+	std::vector<TTransaction>& vTransactions)
+{
+
+}

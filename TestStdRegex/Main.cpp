@@ -3,11 +3,6 @@
 #include <iostream>
 #include "Utils.h"
 
-struct TLine {
-	int iLineStart;
-	int lLineEnd;
-};
-
 int main() {
 	std::string sFileName = "TestFile.txt";
 	std::ifstream file(sFileName, std::ifstream::binary);
