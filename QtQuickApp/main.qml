@@ -1,27 +1,50 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick
+import QtQuick.Window
 import QtQuick.Layouts
 
 Window {
     width: 640
     height: 480
     visible: true
-    color: "lightgreen"
+    color: "azure"
     title: qsTr("CryptoInfomation")
     ColumnLayout{
-        id: layout
-        Text {
-            id: label1
-            text: "Hello 1"
+        id: columnLayout
+        spacing: 10
+        RowLayout{
+            id: rowBlance
+            spacing: 10
+            Text {
+                id: textBalance
+                text: qsTr("Balance:")
+                font.family: "Ubuntu"
+                font.pixelSize: 28
+            }
+            Text {
+                focus: true
+                id: balance
+                text: qsTr("100")
+                Keys.onSpacePressed: {
+                    balance.text = ''
+                }
+                font.family: "Ubuntu"
+                font.pixelSize: 28
+            }
+            Text {
+                id: currency
+                text: qsTr("USD")
+                font.family: "Ubuntu"
+                font.pixelSize: 28
+            }
+
         }
-        Text {
-            id: label2
-            anchors.left: label1.right
-            text: "Hello 2"
-        }
-        Text {
-            id: label3
-            text: "Hello 3"
+
+        Rectangle{
+            id: recChart
+            Text {
+                id: chartText
+                text: qsTr("Chart")
+            }
         }
     }
 }
