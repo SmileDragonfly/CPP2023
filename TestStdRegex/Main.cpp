@@ -25,17 +25,17 @@ int main() {
 		file.close();
 
 		// Get all lines of file
-		std::vector<std::vector<char>> vLines;
-		FindAllLines(pFileBuf, nFileSize, vLines);
-		std::string sPattern("TRANSACTION START");
-		for (int i = 0; i < vLines.size(); i++)
-		{
-			if (SearchPatternInLine(vLines[i], sPattern))
-			{
-				std::cout << "Index: " << i << std::endl;
-				break;
-			}
-		}
+		//std::vector<std::vector<char>> vLines;
+		//FindAllLines(pFileBuf, nFileSize, vLines);
+		//std::string sPattern("TRANSACTION START");
+		//for (int i = 0; i < vLines.size(); i++)
+		//{
+		//	if (SearchPatternInLine(vLines[i], sPattern))
+		//	{
+		//		std::cout << "Index: " << i << std::endl;
+		//		break;
+		//	}
+		//}
 	}
 	char c;
 	std::cin >> c;
