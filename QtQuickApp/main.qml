@@ -16,41 +16,52 @@ Window {
         RowLayout{
             id: rowBlance
             spacing: 10
+            Layout.topMargin: 10
             Text {
                 id: textBalance
+                Layout.leftMargin: 10
                 text: qsTr("Balance:")
                 font.family: "Ubuntu"
-                font.pixelSize: 28
+                font.pixelSize: 20
             }
             Text {
                 focus: true
-                id: balance
+                id: balance                
                 text: qsTr("100")
                 Keys.onSpacePressed: {
                     balance.text = ''
                 }
                 font.family: "Ubuntu"
-                font.pixelSize: 28
+                font.pixelSize: 20
             }
             Text {
                 id: currency
                 text: qsTr("USD")
                 font.family: "Ubuntu"
-                font.pixelSize: 28
+                font.pixelSize: 20
             }
 
         }
 
         Rectangle{
-            id: recChart
+            id: kLineChart
+            Layout.leftMargin: 10
             Text {
                 id: chartText
-                text: qsTr("Chart")
+                Layout.leftMargin: parent.leftMargin
+                text: qsTr("Chart:")
+                font.family: "Ubuntu"
+                font.pixelSize: 20
             }
+
         }
 
         function updateBalance(msg: string) {
             balance.text = qsTr(msg)
+        }
+
+        function updateKLineChart(sData: string) {
+            console.log("KLine Data: " + sData)
         }
     }
 }
