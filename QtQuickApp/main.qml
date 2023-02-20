@@ -8,7 +8,9 @@ Window {
     visible: true
     color: "azure"
     title: qsTr("CryptoInfomation")
+    objectName: "MainWindow"
     ColumnLayout{
+        objectName: "ColumnLayout"
         id: columnLayout
         spacing: 10
         RowLayout{
@@ -45,6 +47,10 @@ Window {
                 id: chartText
                 text: qsTr("Chart")
             }
+        }
+
+        function updateBalance(msg: string) {
+            balance.text = qsTr(msg)
         }
     }
 }
