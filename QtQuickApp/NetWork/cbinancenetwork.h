@@ -2,6 +2,7 @@
 #define CBINANCENETWORK_H
 
 #include <QObject>
+#include <QNetworkReply>
 
 class CBinanceNetwork : public QObject
 {
@@ -10,8 +11,9 @@ public:
     explicit CBinanceNetwork(QObject *parent = nullptr);
 public:
     void GetKLineData(QString sSymbol, QString sInterval, QObject* objUI);
-signals:
-
+public slots:
+    void replyFinished(QNetworkReply* reply);
+    void replySslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
 };
 
 #endif // CBINANCENETWORK_H

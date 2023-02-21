@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     QList<QObject*> lObj = engine.rootObjects();
+    CBinanceNetwork binanceNetwork;
     for(QObject* obj:lObj)
     {
         qDebug() << "Root Object name:" << obj->objectName();
         QObject* childObject = obj->findChild<QObject*>("ColumnLayout");
-        CBinanceNetwork binanceNetwork;
         qDebug() << "Support ssl: " << QSslSocket::supportsSsl();
         QList<QString> lBackends = QSslSocket::availableBackends();
         for (const QString &sBackend : qAsConst(lBackends))
