@@ -3,6 +3,7 @@
 #include "NetWork/cbinancenetwork.h"
 #include "Connector/cconnector.h"
 #include <QSslSocket>
+#include "Database/dbmanager.h"
 
 
 int main(int argc, char *argv[])
@@ -25,6 +26,7 @@ int main(int argc, char *argv[])
     CBinanceNetwork binanceNetwork;
     CDataLayer dataLayer;
     CConnector::ConnectBinanceNetWorkAndDataLayer(&binanceNetwork, &dataLayer);
+    CDBManager::OpenDB("crypto.db");
     binanceNetwork.GetSymbolPriceTicker();
     //for(QObject* obj:lObj)
     //{

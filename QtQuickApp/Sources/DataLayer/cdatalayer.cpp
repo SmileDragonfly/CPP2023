@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include "Sources/Database/dbmanager.h"
 
 CDataLayer::CDataLayer(QObject *parent)
     : QObject{parent}
@@ -12,7 +13,7 @@ CDataLayer::CDataLayer(QObject *parent)
 
 void CDataLayer::slotSymbolPriceTicker(QString sPriceData)
 {
-    qDebug() << "CDataLayer::slotSymbolPriceTicker: sPriceData= " << sPriceData;
+    //qDebug() << "CDataLayer::slotSymbolPriceTicker: sPriceData= " << sPriceData;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(sPriceData.toUtf8());
     QJsonArray jsonArr = jsonDoc.array();
     QJsonArray jsonArrBUSD;
@@ -23,6 +24,10 @@ void CDataLayer::slotSymbolPriceTicker(QString sPriceData)
             jsonArrBUSD.push_back(*it);
         }
     }
-    qDebug() << jsonArrBUSD.size();
+    QJsonDocument jsonDocBUSD;
+    jsonDocBUSD.setArray(jsonArrBUSD);
     qDebug() << jsonArrBUSD;
+    qDebug() << jsonDocBUSD;
+    CDBManager::InsertToTblPriceBUSD(jsonDocBUSD.toJson(QJsonDocument::Compact));
+    //qDebug() << jsonArrBUSD.size();
 }
