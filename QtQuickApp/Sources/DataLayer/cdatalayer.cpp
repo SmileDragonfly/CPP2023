@@ -15,6 +15,14 @@ void CDataLayer::slotSymbolPriceTicker(QString sPriceData)
     qDebug() << "CDataLayer::slotSymbolPriceTicker: sPriceData= " << sPriceData;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(sPriceData.toUtf8());
     QJsonArray jsonArr = jsonDoc.array();
-    qDebug() << jsonArr[0].toObject()["symbol"];
-    qDebug() << jsonArr[0].toObject()["price"];
+    QJsonArray jsonArrBUSD;
+    for (QJsonArray::iterator it = jsonArr.begin(); it != jsonArr.end(); it++)
+    {
+        if (it->toObject().value("symbol").toString().contains(QRegularExpression("BUSD$")))
+        {
+            jsonArrBUSD.push_back(*it);
+        }
+    }
+    qDebug() << jsonArrBUSD.size();
+    qDebug() << jsonArrBUSD;
 }

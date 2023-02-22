@@ -2,9 +2,11 @@
 //
 
 #include <iostream>
+#include "Utils.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+    Utils::ReplaceAGroup("", "");
 }
 
