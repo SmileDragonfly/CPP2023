@@ -40,6 +40,9 @@
     <ClCompile Include="Sources\NetWork\cbinancenetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\cconfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Sources\Connector\cconnector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,6 +60,9 @@
     <QtMoc Include="Sources\NetWork\cbinancenetwork.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Sources\cconfig.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <QtMoc Include="Sources\Connector\cconnector.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -68,6 +74,8 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    
+    
     
     
     

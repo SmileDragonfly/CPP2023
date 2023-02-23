@@ -18,6 +18,7 @@ public:
 signals:
     void signalGetSymbolPriceTickerFinished(QString reply);
 public slots:
+    void slotGetSymbolPriceTickerOnTimer();
     void slotGetKLineDataFinished(QNetworkReply* reply);
     void slotGetSymbolPriceTickerFinished(QNetworkReply* reply);
 };

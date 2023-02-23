@@ -26,8 +26,19 @@ void CDataLayer::slotSymbolPriceTicker(QString sPriceData)
     }
     QJsonDocument jsonDocBUSD;
     jsonDocBUSD.setArray(jsonArrBUSD);
-    qDebug() << jsonArrBUSD;
-    qDebug() << jsonDocBUSD;
-    CDBManager::InsertToTblPriceBUSD(jsonDocBUSD.toJson(QJsonDocument::Compact));
+    QString sCurrPrice = jsonDocBUSD.toJson(QJsonDocument::Compact);
+    //qDebug() << jsonArrBUSD;
+    //qDebug() << jsonDocBUSD;
+    CDBManager::InsertToTblPriceBUSD(sCurrPrice);
+    QString sOneMinAgoPrice = CDBManager::GetOneMinAgoPrice();
+    if (sOneMinAgoPrice == "")
+    {
+        qDebug() << "Wait for init data";
+    }
+    else
+    {
+        qDebug() << "Curr Price: " << sCurrPrice;
+        qDebug() << "Prev Price: " << sOneMinAgoPrice;
+    }
     //qDebug() << jsonArrBUSD.size();
 }

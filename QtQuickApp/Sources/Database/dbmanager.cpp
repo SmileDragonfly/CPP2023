@@ -33,7 +33,7 @@ bool CDBManager::OpenDB(QString sPath)
 
 bool CDBManager::InsertToTblPriceBUSD(QString sPrice)
 {
-    qDebug() << sPrice;
+    //qDebug() << sPrice;
     if (!IsOpen())
     {
         return false;
@@ -49,5 +49,28 @@ bool CDBManager::InsertToTblPriceBUSD(QString sPrice)
     {
         qDebug() << "DBManager::InsertToTblPriceBUSD: Insert price failed. Error=" << query.lastError();
         return false;
+    }
+}
+
+QString CDBManager::GetOneMinAgoPrice()
+{
+    if (!IsOpen())
+    {
+        return "";
+    }  
+    QSqlQuery query;
+    query.prepare("Select * from tblPriceBUSD where timestamp > Datetime('now', '-59 seconds') order by timestamp asc LIMIT 1");
+    if (query.exec())
+    {
+        if (query.next())
+        {
+            QString price = query.value(2).toString();
+            return price;
+        }
+    }
+    else
+    {
+        qDebug() << "DBManager::InsertToTblPriceBUSD: Insert price failed. Error=" << query.lastError();
+        return "";
     }
 }

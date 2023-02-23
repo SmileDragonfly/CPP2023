@@ -4,6 +4,9 @@
 #include "Connector/cconnector.h"
 #include <QSslSocket>
 #include "Database/dbmanager.h"
+#include "CConfig.h"
+#include <QThread>
+#include <QTimer>
 
 
 int main(int argc, char *argv[])
@@ -22,12 +25,23 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    //QList<QObject*> lObj = engine.rootObjects();
-    CBinanceNetwork binanceNetwork;
-    CDataLayer dataLayer;
-    CConnector::ConnectBinanceNetWorkAndDataLayer(&binanceNetwork, &dataLayer);
+    // Load config file
+    CConfig config;
+    config.InitConfigFile("Config.ini");
+
+    // Create thread to get binance data
+    CBinanceNetwork* binanceNetwork = new CBinanceNetwork();
+    CDataLayer* dataLayer = new CDataLayer();
+    CConnector::ConnectBinanceNetWorkAndDataLayer(binanceNetwork, dataLayer);
     CDBManager::OpenDB("crypto.db");
-    binanceNetwork.GetSymbolPriceTicker();
+
+    QTimer* dataTimer = new QTimer();
+    QObject::connect(dataTimer, SIGNAL(timeout()), binanceNetwork, SLOT(slotGetSymbolPriceTickerOnTimer()));
+    dataTimer->setInterval(config.IntervalSymbolPrice() * 1000);
+    dataTimer->start();
+
+    //QList<QObject*> lObj = engine.rootObjects();
+    //binanceNetwork.GetSymbolPriceTicker();
     //for(QObject* obj:lObj)
     //{
     //    qDebug() << "Root Object name:" << obj->objectName();

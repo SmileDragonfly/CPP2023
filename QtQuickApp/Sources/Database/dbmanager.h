@@ -12,6 +12,7 @@ public:
     static bool IsOpen();
     static bool OpenDB(QString sPath);
     static bool InsertToTblPriceBUSD(QString sPrice);
+    static QString GetOneMinAgoPrice();
 signals:
 
 private:

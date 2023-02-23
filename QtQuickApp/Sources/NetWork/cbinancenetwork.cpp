@@ -7,6 +7,7 @@ CBinanceNetwork::CBinanceNetwork(QObject *parent)
 {
     m_pNetworkManager = new QNetworkAccessManager();
     m_pNetworkRequest = new QNetworkRequest();
+    QObject::connect(m_pNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotGetSymbolPriceTickerFinished(QNetworkReply*)));
     QSslConfiguration config = QSslConfiguration::defaultConfiguration();
     m_pNetworkRequest->setSslConfiguration(config);
 }
@@ -38,7 +39,7 @@ void CBinanceNetwork::slotGetSymbolPriceTickerFinished(QNetworkReply* reply)
         return;
     }
     QString answer = reply->readAll();
-    qDebug() << "CBinanceNetwork::slotGetSymbolPriceTickerFinished: Answer= " << answer;
+    // qDebug() << "CBinanceNetwork::slotGetSymbolPriceTickerFinished: Answer= " << answer;
     emit signalGetSymbolPriceTickerFinished(answer);
 }
 
@@ -52,3 +53,9 @@ void CBinanceNetwork::slotGetKLineDataFinished(QNetworkReply* reply)
     qDebug() << answer;
 }
 
+void CBinanceNetwork::slotGetSymbolPriceTickerOnTimer()
+{
+    QString sUrl = QString("https://api.binance.com/api/v3/ticker/price");
+    m_pNetworkRequest->setUrl(sUrl);
+    m_pNetworkManager->get(*m_pNetworkRequest);
+}
