@@ -49,6 +49,9 @@
     <ClCompile Include="Sources\DataLayer\cdatalayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Worker\cworker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Sources\Database\dbmanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,11 +72,16 @@
     <QtMoc Include="Sources\DataLayer\cdatalayer.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Sources\Worker\cworker.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <QtMoc Include="Sources\Database\dbmanager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
+    
+    
     
     
     

@@ -10,6 +10,7 @@ SOURCES += \
         Sources/DataLayer/cdatalayer.cpp \
         Sources/Database/dbmanager.cpp \
         Sources/NetWork/cbinancenetwork.cpp \
+        Sources/Worker/cworker.cpp \
         Sources/cconfig.cpp \
         Sources/main.cpp
 
@@ -35,5 +36,6 @@ HEADERS += \
     Sources/DataLayer/cdatalayer.h \
     Sources/Database/dbmanager.h \
     Sources/NetWork/cbinancenetwork.h \
+    Sources/Worker/cworker.h \
     Sources/cconfig.h
 

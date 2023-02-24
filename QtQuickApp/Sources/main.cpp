@@ -34,7 +34,10 @@ int main(int argc, char *argv[])
     CDataLayer* dataLayer = new CDataLayer();
     CConnector::ConnectBinanceNetWorkAndDataLayer(binanceNetwork, dataLayer);
     CDBManager::OpenDB("crypto.db");
+    // Get first time
+    binanceNetwork->GetSymbolPriceTicker();
 
+    // Get price after by timer 
     QTimer* dataTimer = new QTimer();
     QObject::connect(dataTimer, SIGNAL(timeout()), binanceNetwork, SLOT(slotGetSymbolPriceTickerOnTimer()));
     dataTimer->setInterval(config.IntervalSymbolPrice() * 1000);
