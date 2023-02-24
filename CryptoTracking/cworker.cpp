@@ -84,6 +84,10 @@ QString CWorker::CalculatePercent(QString sCurPrice, QString sPrevPrice)
 void CWorker::Calculate1MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 {
     QString sPercent = CalculatePercent(sCurPrice, sPrevPrice);
+    if (sPercent.isEmpty())
+    {
+        qDebug() << __FUNCTION__;
+    }
     // Emit signal to insert percent to DB
     emit signalCalculate1MinDone(sPercent);
 }
@@ -91,6 +95,10 @@ void CWorker::Calculate1MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 void CWorker::Calculate5MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 {
     QString sPercent = CalculatePercent(sCurPrice, sPrevPrice);
+    if (sPercent.isEmpty())
+    {
+        qDebug() << __FUNCTION__;
+    }
     // Emit signal to insert percent to DB
     emit signalCalculate5MinDone(sPercent);
 }
@@ -98,6 +106,10 @@ void CWorker::Calculate5MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 void CWorker::Calculate10MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 {
     QString sPercent = CalculatePercent(sCurPrice, sPrevPrice);
+    if (sPercent.isEmpty())
+    {
+        qDebug() << __FUNCTION__;
+    }
     // Emit signal to insert percent to DB
     emit signalCalculate10MinDone(sPercent);
 }
@@ -105,6 +117,10 @@ void CWorker::Calculate10MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 void CWorker::Calculate15MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 {
     QString sPercent = CalculatePercent(sCurPrice, sPrevPrice);
+    if (sPercent.isEmpty())
+    {
+        qDebug() << __FUNCTION__;
+    }
     // Emit signal to insert percent to DB
     emit signalCalculate15MinDone(sPercent);
 }
@@ -112,6 +128,10 @@ void CWorker::Calculate15MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 void CWorker::Calculate30MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 {
     QString sPercent = CalculatePercent(sCurPrice, sPrevPrice);
+    if (sPercent.isEmpty())
+    {
+        qDebug() << __FUNCTION__;
+    }
     // Emit signal to insert percent to DB
     emit signalCalculate30MinDone(sPercent);
 }
@@ -119,6 +139,10 @@ void CWorker::Calculate30MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 void CWorker::Calculate60MinPercentBUSD(QString sCurPrice, QString sPrevPrice)
 {
     QString sPercent = CalculatePercent(sCurPrice, sPrevPrice);
+    if (sPercent.isEmpty())
+    {
+        qDebug() << __FUNCTION__;
+    }
     // Emit signal to insert percent to DB
     emit signalCalculate60MinDone(sPercent);
 }
