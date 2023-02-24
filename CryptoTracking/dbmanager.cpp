@@ -181,9 +181,9 @@ void CDBManager::slotInsert1MinBUSD(QString sPercent)
     {
         QJsonObject obj = it.toObject();
         QString symbol = obj.value("symbol").toString();
-        double price = obj.value("price").toDouble();
-        double prevPrice = obj.value("prevPrice").toDouble();
-        double percent = obj.value("percent").toDouble();
+        float price = obj.value("price").toDouble();
+        float prevPrice = obj.value("prevPrice").toDouble();
+        float percent = obj.value("percent").toDouble();
         query.bindValue(":symbol", symbol);
         query.bindValue(":price", price);
         query.bindValue(":prevPrice", prevPrice);

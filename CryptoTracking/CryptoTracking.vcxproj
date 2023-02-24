@@ -63,12 +63,18 @@
       <AdditionalLibraryDirectories>C:\Qt\Tools\OpenSSL\Win_x64\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);libcrypto.lib;libssl.lib;</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalLibraryDirectories>C:\Qt\Tools\OpenSSL\Win_x64\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);libcrypto.lib;libssl.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\Tools\OpenSSL\Win_x64\lib;C:\Qt\6.4.2\msvc2019_64\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);$(Qt_LIBS_);libcrypto.lib;libssl.lib;Qt6Sql.lib</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Qt\6.4.2\msvc2019_64\include\QtSql;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>

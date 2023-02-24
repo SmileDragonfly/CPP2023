@@ -57,15 +57,15 @@ QString CWorker::CalculatePercent(QString sCurPrice, QString sPrevPrice)
             QJsonObject objRet;
             QJsonObject obj = it.toObject();
             QString sSymbol = obj.value("symbol").toString();
-            double fCurPrice = obj.value("price").toDouble();
+            float fCurPrice = obj.value("price").toString().toFloat();
             foreach (auto itPrev, arrPrev)
             {
                 QJsonObject objPrev = itPrev.toObject();
                 QString sSymbolPrev = objPrev.value("symbol").toString();
                 if (sSymbol == sSymbolPrev)
                 {
-                    double fPrevPrice = objPrev.value("price").toDouble();
-                    double fPercent = (fCurPrice - fPrevPrice) / fPrevPrice;
+                    float fPrevPrice = objPrev.value("price").toString().toFloat();
+                    float fPercent = (fCurPrice - fPrevPrice) / fPrevPrice;
                     objRet["symbol"] = sSymbol;
                     objRet["price"] = fCurPrice;
                     objRet["prevPrice"] = fPrevPrice;
