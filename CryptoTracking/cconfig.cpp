@@ -10,14 +10,26 @@ CConfig::CConfig(QObject *parent)
 void CConfig::InitConfigFile(QString sPath)
 {
     QSettings settings(sPath, QSettings::IniFormat);
-    // Get group time
+    // GROUP TIME
     settings.beginGroup("TIME");
-    const QStringList childKeys = settings.childKeys();
+    QStringList childKeys = settings.childKeys();
     foreach(const QString & childKey, childKeys)
     {
         if (childKey == "INTERVAL_SYMBOL_PRICE")
         {
             m_IntervalSymbolPrice = settings.value(childKey).toInt();
+        }
+    }
+    settings.endGroup();
+
+    // Group SQLITE
+    settings.beginGroup("SQLITE");
+    childKeys = settings.childKeys();
+    foreach(const QString& childKey, childKeys)
+    {
+        if (childKey == "FILE_NAME")
+        {
+            m_SqliteDBName = settings.value(childKey).toString();
         }
     }
     settings.endGroup();
@@ -31,4 +43,14 @@ int CConfig::IntervalSymbolPrice() const
 void CConfig::setIntervalSymbolPrice(int newIntervalSymbolPrice)
 {
     m_IntervalSymbolPrice = newIntervalSymbolPrice;
+}
+
+QString CConfig::SqliteDBName() const
+{
+    return m_SqliteDBName;
+}
+
+void CConfig::setSqliteDBName(QString newSqliteDBName)
+{
+    m_SqliteDBName = newSqliteDBName;
 }

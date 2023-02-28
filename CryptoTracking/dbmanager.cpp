@@ -6,8 +6,6 @@
 #include <QSqlDriver>
 #include <QJsonObject>
 
-QSqlDatabase CDBManager::m_db;
-
 CDBManager::CDBManager(QObject *parent)
     : QObject{parent}
 {
@@ -19,10 +17,14 @@ bool CDBManager::IsOpen()
     return m_db.isOpen();
 }
 
-bool CDBManager::OpenDB(QString sPath)
+void CDBManager::SetDB(QString sPath)
 {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(sPath);
+}
+
+bool CDBManager::OpenDB()
+{
     if (!m_db.open())
     {
         qDebug() << "DBManager::OpenSQLite: Connection with database failed";
@@ -32,10 +34,13 @@ bool CDBManager::OpenDB(QString sPath)
     {
         qDebug() << "DBManager::OpenSQLite: Support transaction: " << m_db.driver()->hasFeature(QSqlDriver::Transactions);
         qDebug() << "DBManager::OpenSQLite: Connection ok";
-        //QString s = "[{\"symbol\": \"BNBBUSD\", \"price\" : 400, \"prevPrice\" : 401, \"percent\" : 2}, {\"symbol\": \"BNBBUSD\", \"price\" : 402, \"prevPrice\" : 403, \"percent\" : 2}]";
-        //slotInsert1MinBUSD(s);
         return true;
     }
+}
+
+void CDBManager::CloseDB()
+{
+    m_db.close();
 }
 
 QString CDBManager::Get1MinAgoPriceBUSD()

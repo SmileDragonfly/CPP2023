@@ -6,31 +6,13 @@
 CWorker::CWorker(QObject *parent)
     : QObject{parent}
 {
-    m_pNetwork = new CBinanceNetwork();
-    m_pDB = new CDBManager();
-    m_pDB->OpenDB("crypto.db");
-    m_pTimer = new QTimer();
-    // Connect network and worker to get price for BUSD
-    QObject::connect(m_pNetwork, &CBinanceNetwork::signalGetSymbolPriceTickerFinished, this, &CWorker::slotGetPriceBUSD);
-    // Connect worker to DB to insert price in BUSD
-    QObject::connect(this, &CWorker::signalGetPriceBUSBDone, m_pDB, &CDBManager::slotInsertToTblBUSDPrice);
-    // Connect worker to DB to insert percent change in time
-    QObject::connect(this, &CWorker::signalCalculate1MinDone, m_pDB, &CDBManager::slotInsert1MinBUSD);
-    QObject::connect(this, &CWorker::signalCalculate5MinDone, m_pDB, &CDBManager::slotInsert5MinBUSD);
-    QObject::connect(this, &CWorker::signalCalculate10MinDone, m_pDB, &CDBManager::slotInsert10MinBUSD);
-    QObject::connect(this, &CWorker::signalCalculate15MinDone, m_pDB, &CDBManager::slotInsert15MinBUSD);
-    QObject::connect(this, &CWorker::signalCalculate30MinDone, m_pDB, &CDBManager::slotInsert30MinBUSD);
-    QObject::connect(this, &CWorker::signalCalculate60MinDone, m_pDB, &CDBManager::slotInsert60MinBUSD);
-    // Connect timeout signal with worker to get all price
-    QObject::connect(m_pTimer, &QTimer::timeout, this, &CWorker::slotGetAllPriceTimer);
+    // Connect start signal to start slot (start slot run on another thread)
+    QObject::connect(this, &CWorker::signalStartWoker, this, &CWorker::slotStartWorker);
 }
 
 void CWorker::Start(CConfig* pConfig)
 {
-    m_pConfig = pConfig;
-    m_pNetwork->GetSymbolPriceTicker();
-    m_pTimer->setInterval(m_pConfig->IntervalSymbolPrice() * 1000); // milli senconds
-    m_pTimer->start();
+    emit signalStartWoker(pConfig);
 }
 
 // Input :[{"price":"310.60000000","symbol":"BNBBUSD"},
@@ -152,36 +134,68 @@ void CWorker::slotGetAllPriceTimer()
     m_pNetwork->GetSymbolPriceTicker();
 }
 
+void CWorker::slotStartWorker(CConfig* pConfig)
+{
+    m_pConfig = pConfig;
+    // Create objects
+    m_pNetwork = new CBinanceNetwork();
+    m_pDB = new CDBManager();
+    m_pTimer = new QTimer();
+    // Connect network and worker to get price for BUSD
+    QObject::connect(m_pNetwork, &CBinanceNetwork::signalGetSymbolPriceTickerFinished, this, &CWorker::slotGetPriceBUSD);
+    // Connect worker to DB to insert price in BUSD
+    QObject::connect(this, &CWorker::signalGetPriceBUSBDone, m_pDB, &CDBManager::slotInsertToTblBUSDPrice);
+    // Connect worker to DB to insert percent change in time
+    QObject::connect(this, &CWorker::signalCalculate1MinDone, m_pDB, &CDBManager::slotInsert1MinBUSD);
+    QObject::connect(this, &CWorker::signalCalculate5MinDone, m_pDB, &CDBManager::slotInsert5MinBUSD);
+    QObject::connect(this, &CWorker::signalCalculate10MinDone, m_pDB, &CDBManager::slotInsert10MinBUSD);
+    QObject::connect(this, &CWorker::signalCalculate15MinDone, m_pDB, &CDBManager::slotInsert15MinBUSD);
+    QObject::connect(this, &CWorker::signalCalculate30MinDone, m_pDB, &CDBManager::slotInsert30MinBUSD);
+    QObject::connect(this, &CWorker::signalCalculate60MinDone, m_pDB, &CDBManager::slotInsert60MinBUSD);
+    // Connect timeout signal with worker to get all price
+    QObject::connect(m_pTimer, &QTimer::timeout, this, &CWorker::slotGetAllPriceTimer);
+
+    // Set DB
+    m_pDB->SetDB(pConfig->SqliteDBName());
+    m_pNetwork->GetSymbolPriceTicker();
+    m_pTimer->setInterval(m_pConfig->IntervalSymbolPrice() * 1000); // milli senconds
+    m_pTimer->start();
+}
+
 void CWorker::slotGetPriceBUSD(QString sAllPrice)
 {
-    QString sBUSDPrice;
-    // Process json data to get current price in BUSD
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(sAllPrice.toUtf8());
-    QJsonArray jsonArr = jsonDoc.array();
-    QJsonArray jsonArrBUSD;
-    for (QJsonArray::iterator it = jsonArr.begin(); it != jsonArr.end(); it++)
+    if (m_pDB->OpenDB())
     {
-        if (it->toObject().value("symbol").toString().contains(QRegularExpression("BUSD$")))
+        QString sBUSDPrice;
+        // Process json data to get current price in BUSD
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(sAllPrice.toUtf8());
+        QJsonArray jsonArr = jsonDoc.array();
+        QJsonArray jsonArrBUSD;
+        for (QJsonArray::iterator it = jsonArr.begin(); it != jsonArr.end(); it++)
         {
-            jsonArrBUSD.push_back(*it);
+            if (it->toObject().value("symbol").toString().contains(QRegularExpression("BUSD$")))
+            {
+                jsonArrBUSD.push_back(*it);
+            }
         }
+        QJsonDocument jsonDocBUSD;
+        jsonDocBUSD.setArray(jsonArrBUSD);
+        sBUSDPrice = jsonDocBUSD.toJson(QJsonDocument::Compact);
+        // Get previous price
+        QString sPrice1MinAgo = m_pDB->Get1MinAgoPriceBUSD();
+        QString sPrice5MinAgo = m_pDB->Get5MinAgoPriceBUSD();
+        QString sPrice10MinAgo = m_pDB->Get10MinAgoPriceBUSD();
+        QString sPrice15MinAgo = m_pDB->Get15MinAgoPriceBUSD();
+        QString sPrice30MinAgo = m_pDB->Get30MinAgoPriceBUSD();
+        QString sPrice60MinAgo = m_pDB->Get60MinAgoPriceBUSD();
+        Calculate1MinPercentBUSD(sBUSDPrice, sPrice1MinAgo);
+        Calculate5MinPercentBUSD(sBUSDPrice, sPrice5MinAgo);
+        Calculate10MinPercentBUSD(sBUSDPrice, sPrice10MinAgo);
+        Calculate15MinPercentBUSD(sBUSDPrice, sPrice15MinAgo);
+        Calculate30MinPercentBUSD(sBUSDPrice, sPrice30MinAgo);
+        Calculate60MinPercentBUSD(sBUSDPrice, sPrice60MinAgo);
+        // Emit signal to insert current price to DB
+        emit signalGetPriceBUSBDone(sBUSDPrice);
+        m_pDB->CloseDB();
     }
-    QJsonDocument jsonDocBUSD;
-    jsonDocBUSD.setArray(jsonArrBUSD);
-    sBUSDPrice = jsonDocBUSD.toJson(QJsonDocument::Compact);
-    // Get previous price
-    QString sPrice1MinAgo = m_pDB->Get1MinAgoPriceBUSD();
-    QString sPrice5MinAgo = m_pDB->Get5MinAgoPriceBUSD();
-    QString sPrice10MinAgo = m_pDB->Get10MinAgoPriceBUSD();
-    QString sPrice15MinAgo = m_pDB->Get15MinAgoPriceBUSD();
-    QString sPrice30MinAgo = m_pDB->Get30MinAgoPriceBUSD();
-    QString sPrice60MinAgo = m_pDB->Get60MinAgoPriceBUSD();
-    Calculate1MinPercentBUSD(sBUSDPrice, sPrice1MinAgo);
-    Calculate5MinPercentBUSD(sBUSDPrice, sPrice5MinAgo);
-    Calculate10MinPercentBUSD(sBUSDPrice, sPrice10MinAgo);
-    Calculate15MinPercentBUSD(sBUSDPrice, sPrice15MinAgo);
-    Calculate30MinPercentBUSD(sBUSDPrice, sPrice30MinAgo);
-    Calculate60MinPercentBUSD(sBUSDPrice, sPrice60MinAgo);
-    // Emit signal to insert current price to DB
-    emit signalGetPriceBUSBDone(sBUSDPrice);
 }

@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include "cworker.h"
 #include "cconfig.h"
+#include <QThread>
 
 int main(int argc, char *argv[])
 {
@@ -9,16 +10,19 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
+    //QQmlApplicationEngine engine;
+    //engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    //if (engine.rootObjects().isEmpty())
+    //    return -1;
     // Load config and start worker
     CConfig config;
     config.InitConfigFile("Config.ini");
     CWorker worker;
+    QThread workerThread;
+    worker.moveToThread(&workerThread);
+    workerThread.start();
     worker.Start(&config);
 
     return app.exec();

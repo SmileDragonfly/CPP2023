@@ -10,7 +10,9 @@ class CDBManager : public QObject
 public:
     explicit CDBManager(QObject *parent = nullptr);
     bool IsOpen();
-    bool OpenDB(QString sPath);
+    void SetDB(QString sPath);
+    bool OpenDB();
+    void CloseDB();
     QString Get1MinAgoPriceBUSD();
     QString Get5MinAgoPriceBUSD();
     QString Get10MinAgoPriceBUSD();
@@ -28,7 +30,7 @@ public slots:
     void slotInsert30MinBUSD(QString sPercent);
     void slotInsert60MinBUSD(QString sPercent);
 private:
-    static QSqlDatabase m_db;
+    QSqlDatabase m_db;
 };
 
 #endif // DBMANAGER_H

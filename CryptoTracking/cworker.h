@@ -26,6 +26,8 @@ private:
     void Calculate30MinPercentBUSD(QString sCurPrice, QString sPrevPrice);
     void Calculate60MinPercentBUSD(QString sCurPrice, QString sPrevPrice);
 signals:
+    // Signal start to start on another thread
+    void signalStartWoker(CConfig* pConfig);
     // DB signals
     void signalCalculate1MinDone(QString sPercent);
     void signalCalculate5MinDone(QString sPercent);
@@ -39,6 +41,8 @@ public slots:
     void slotGetPriceBUSD(QString sAllPrice);
     // timer slot
     void slotGetAllPriceTimer();
+    // start slot
+    void slotStartWorker(CConfig* pConfig);
 };
 
 #endif // CWORKER_H
